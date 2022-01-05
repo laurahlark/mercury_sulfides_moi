@@ -1,9 +1,9 @@
-% Produces data for figures 3 and 4. 
+% Produces data for figure S4
 
 % How does the geodetically constrained core density and moment of inertia 
 % compare to the geochemically predicted?
 
-% Figure 3, part a: geodetic constraints.
+% Part a
 
 R = 2439.36e3;
 M = 3.30111e23;
@@ -30,20 +30,18 @@ I_hi = .343;
 geodetic_core_I_extracted_hi = (I_hi*M*R^2 - I_m)'./(M_c_extracted.*R_c_extracted.^2);
 geodetic_core_I_dispersed_hi = (I_hi*M*R^2 - I_m)'./(M_c_dispersed.*R_c_dispersed.^2);
 
-% Figure 3, part b: geochemical predictions for FeSi.
-
 T_of_r = fn_get_default_T_profile();
-r_ic__ = [0 600e3 1000e3 1200e3];
+r_ic__ = [0 1200e3];
 X_Si__ = 0:.01:.2;
 
 default_R_c = 1990e3;
 default_P_c = 5.5e9;
 [geochemical_core_rho, geochemical_core_I] = fn_get_cores_rho_I(...
     X_Si__, r_ic__, T_of_r, default_R_c, default_P_c, ...
-    @(X_Si) get_FeSiC_Knibbe_2021(zeros(size(X_Si)), X_Si));
+    @(X_Si) get_nonideal_FeSi_EOS(X_Si));
 
 
-%% Figure 4.
+% Part b
 
 % What are the geodetic constraints on core silicon as a function of mantle
 % sulfur, and what are the implications for planetary moment of inertia?
@@ -69,7 +67,7 @@ for i=1:length(r_ic__)
             [final_rho_ex, final_I_ex] = fn_get_cores_rho_I(...
                 X_Si_ex, r_ic__(i), T_of_r, ...
                 R_c_extracted(j, k), P_c_extracted(j, k), ...
-                @(X_Si) get_FeSiC_Knibbe_2021(zeros(size(X_Si)), X_Si));
+                @(X_Si) get_nonideal_FeSi_EOS(X_Si));
             final_core_Si_ex = interp1(...
                 final_rho_ex, X_Si_ex, rho_c_extracted(j, k));
             error_ex(i, j, k) = final_core_Si_ex - preliminary_core_Si_ex;
@@ -88,7 +86,7 @@ for i=1:length(r_ic__)
             [final_rho_d, final_I_d] = fn_get_cores_rho_I(...
                 X_Si_d, r_ic__(i), T_of_r, ...
                 R_c_dispersed(j, k), P_c_dispersed(j, k), ...
-                @(X_Si) get_FeSiC_Knibbe_2021(zeros(size(X_Si)), X_Si));
+                @(X_Si) get_nonideal_FeSi_EOS(X_Si));
             final_core_Si_d = interp1(final_rho_d, X_Si_d, rho_c_dispersed(j, k));
             error_d(i, j, k) = final_core_Si_d - preliminary_core_Si_d;
             fprintf("Dispersed case: default R/P: %g, exact R/P: %g\n", preliminary_core_Si_d, final_core_Si_d);
@@ -100,4 +98,9 @@ for i=1:length(r_ic__)
                 I_m(j)/(M*R^2);
         end
     end
+end
+
+function [EOS_params_l, EOS_l, EOS_params_s, EOS_s] = get_nonideal_FeSi_EOS(X_Si)
+    [EOS_params_l, EOS_l, ~, ~] = get_FeSi_Steinbrugge_2021(X_Si);
+    [~, ~, EOS_params_s, EOS_s] = get_FeSiC_Knibbe_2021(zeros(size(X_Si)), X_Si);
 end

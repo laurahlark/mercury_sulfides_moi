@@ -3,7 +3,7 @@
 
 T_of_r = fn_get_default_T_profile();
 
-[EOS_params_l, EOS_l, EOS_params_s, EOS_s] = get_FeSi_Knibbe_2021(.07);
+[EOS_params_l, EOS_l, EOS_params_s, EOS_s] = get_FeSiC_Knibbe_2021(0, .07);
 EOS_liq = @(T, P) EOS_l(EOS_params_l, T, P);
 EOS_sol = @(T, P) EOS_s(EOS_params_s, T, P);
 
@@ -11,7 +11,7 @@ R_cmb = 1990e3;
 P_cmb = 5.5e9;
 T_cmb = interp1(T_of_r.r, T_of_r.T, R_cmb);
 
-r_ic = 0;  % Change to inspect results for other inner core radii.
+r_ic = 1200e3;  % Change to inspect results for other inner core radii.
 
 % Baseline.
 [I, rho]  = fn_get_core_profile(...

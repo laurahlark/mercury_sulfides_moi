@@ -140,10 +140,3 @@ function [r_all, q, T] = fn_conductive_heat_loss_spherical(T_top, T_bottom, k, H
         end
     end
 end
-
-
-function out=sum_so_far(vector)
-    out = cumsum(vector);
-    % value at i gives sum of vector(1:i).
-%     out = transpose(sum(tril(ones(length(vector), 1) .* vector), 2));
-end
