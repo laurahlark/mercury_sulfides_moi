@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/421927083.svg)](https://zenodo.org/badge/latestdoi/421927083)
+
 This repository contains the code necessary to calculate the quantities used in Lark et al. (submitted to GRL, 2021).
 
 The following files illustrate the use of the code by generating the quantities plotted in the paper.
