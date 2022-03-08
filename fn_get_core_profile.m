@@ -1,4 +1,4 @@
-function [I_c, rho_avg_c, r_in_core, P_in_core, rho_in_core] = fn_get_core_profile(...
+function [C_c, rho_avg_c, r_in_core, P_in_core, rho_in_core] = fn_get_core_profile(...
     R_oc, R_ic, EOS_oc, EOS_ic, P_c, T_of_r)
     M = 3.30111e23;
     M_c_last = 0;
@@ -11,7 +11,7 @@ function [I_c, rho_avg_c, r_in_core, P_in_core, rho_in_core] = fn_get_core_profi
     end
     
     rho_avg_c = M_c/(4/3*pi*R_oc^3);
-    I_c = -trapz(r_in_core, 8/3*pi*r_in_core.^4.*rho_in_core)/(M_c*R_oc^2);
+    C_c = -trapz(r_in_core, 8/3*pi*r_in_core.^4.*rho_in_core)/(M_c*R_oc^2);
 end
 
 function [r_in_core, P_in_core, rho_in_core] = eval_core(...
